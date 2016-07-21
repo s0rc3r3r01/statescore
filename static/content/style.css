@@ -1,0 +1,11 @@
+#center {
+    margin: auto;
+    width: 50%;
+    border: 3px solid green;
+    padding: 10px;
+    text-align: center;
+}
+h1 {
+    color: green;
+    text-align: center;
+}

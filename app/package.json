@@ -1,0 +1,15 @@
+{
+  "name": "StateScoreApplication",
+  "description": "Application for stateful scoring - Msc project",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "4.x",
+    "async": "1.x",
+    "morgan" : "x",
+    "response-time" : "x",
+    "cookie-parser" : "x",
+    "node-uuid" : "x",
+    "colors" : "x"
+  }
+}
