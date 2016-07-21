@@ -43,38 +43,36 @@ exports.incomingConnectionHandler = function(req, res) {
             var startLookup = process.hrtime();
             //starting with memory
             //checking user existance
-            var startlookup = process.hrtime();
+            /*
             if (memory.checkmemory(user)) {
                 console.log("User : " + user + " found in memory".green);
                 //add the view and then read the visit number !
                 memory.addView(user);
-                visitnumber = memory.views(user);
+                visitnumber = memory.countViews(user);
                 //assigning score 1 for memory lookup
                 score = 1;
             } else {
                 console.log("User : " + user + " not found in memory".red);
-                //provisional procedure storing the user in memory
                 memory.storeUser(user);
-                visitnumber = 1;
-                score = 0;
+                //provisional procedure storing the user in memory
                 // no the user does not exist in memory, continue lookup
             }
-            if (volume.checkvolume(user)) {
-
+            */
+            if (volume.checkDisk(user)) {
+                console.log("User : " + user + " found in file".red);
+                volume.addView(user);
+                visitnumber = volume.countViews(user);
+                //assigning score 2 for disk lookup
+                score = 2
+            } else {
+                console.log("User : " + user + " not found in file".red);
+                volume.storeUser(user);
+                visitnumber = 1;
+                score = 0;
             }
 
-            else {
-
-            }
-
-
-
-
-
-
-
-            var lookuptime = elapsed_time(startlookup);
-            console.log("The lookup time was : " + lookuptime + " ms " .yellow)
+            var lookuptime = elapsed_time(startLookup);
+            console.log("The lookup time was : " + lookuptime + " ms ".yellow)
             callback(null, user, visitnumber, lookuptime, score);
 
         },

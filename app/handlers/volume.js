@@ -11,29 +11,59 @@ exports.version = "0.0.1";
 // then closed, I assume this to happen all the time this lookup is made,even if on a strict situation
 //this would probably not be the case as the contents of the file would be loaded in memory and access from there
 // and all the calls are made synchronously to get a proper timing
-var file =
-
-// I want the checkmemory function to be separated to be able to obtain the results and check somewhere else
-exports.checkmemory = function(user) {
-    if (typeof simplememory[user] === 'undefined') {
-        return false;
-    } else {
-        return true;
+exports.checkDisk = function(user) {
+    try {
+        var file = fs.readFileSync('../userlist/users', 'utf8');
+    } catch (e) {
+        console.log(e.red);
+        return (false);
     }
+    if (file.indexOf(user) > -1) {
+        console.log("position in file of the user    " + file.indexOf(user));
+        return true;
+    } else {
+        return false;
+    }
+}
 
+exports.countViews = function(user) {
+    try {
+        var file = fs.readFileSync('../userlist/users', 'utf8');
+    } catch (e) {
+        console.log(e.red);
+        return (false);
+    }
+    //variable containing the number of initial position of the number with the views
+    var viewposition = file.indexOf(user) + user.length + 1;
+    var views = file.substring(viewposition, viewposition+4);
+    console.log("view count : " + views.yellow);
+    return views;
 }
 
 exports.storeUser = function(user) {
-// THIS NEEDS TO BE BRACKET NOTATION
-  simplememory[user] = 1;
-  console.log ("stored user: " + user .yellow);
-}
-
-exports.views = function(user) {
-    return simplememory[user];
+    try {
+        fs.appendFileSync('../userlist/users', user + ":0001:", 'utf8');
+    } catch (e) {
+        console.err(e.red);
+    }
+    console.log("stored user: " + user.yellow);
 }
 
 exports.addView = function(user) {
-    simplememory[user]++;
-    console.log ("views increcmented for " + user .yellow);
+    try {
+        var file = fs.readFileSync('../userlist/users', 'utf8');
+    } catch (e) {
+        console.log(e.red);
+        return (false);
+    }
+    //variable containing the number of initial position of the number with the views
+    var viewposition = file.indexOf(user) + user.length + 1;
+    var views = file.substring(viewposition, viewposition+4);
+    //variable containing an integer with the number of views+1
+    var plus1 = parseInt(views) + 1;
+    //new string variable containing the whole file with the view updated
+    file = file.replace(user + ":" + views, user + ":" + plus1);
+    //writing the file to disk
+    fs.writeFileSync('../userlist/users', file, 'utf8');
+    console.log("new views count for user : " + user + "   " + file.charAt(file.indexOf(user) + user.length + 1).yellow);
 }

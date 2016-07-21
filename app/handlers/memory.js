@@ -23,7 +23,7 @@ exports.storeUser = function(user) {
   console.log ("stored user: " + user .yellow);
 }
 
-exports.views = function(user) {
+exports.countViews = function(user) {
     return simplememory[user];
 }
 
