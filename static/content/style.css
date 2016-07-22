@@ -4,8 +4,36 @@
     border: 3px solid green;
     padding: 10px;
     text-align: center;
+    align-items: center;
 }
 h1 {
     color: green;
     text-align: center;
+}
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+#statistics {
+    display: block;
+    margin: auto auto;
+    align-items: center;
+    align-self: center;
+    align-content: center;
+}
+.x.axis path {
+    display: none;
+}
+.line {
+    fill: none;
+    stroke: green;
+    stroke-width: 1.5px;
+}
+
+body {
+font: 10px sans-serif;
+align-items: center;
+align-content: center;
+margin: auto;
 }

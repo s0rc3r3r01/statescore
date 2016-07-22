@@ -5,7 +5,8 @@ var async = require('async'),
     memory = require('./memory'),
     colors = require('colors'),
     redis = require('./redis'),
-    volume = require('./volume');
+    volume = require('./volume'),
+    tsv = require('./tsv');
 
 exports.version = "0.0.1";
 //explicit definition of user, used for variable scope
@@ -73,42 +74,48 @@ exports.incomingConnectionHandler = function(req, res) {
             }
             */
             redis.checkRedis(user, function(err, reply) {
-                    if (reply) {
-                        console.log("User : " + user + " found in Redis".green);
-                        redis.addView(user, function getVisits(err, reply) {
+                if (reply) {
+                    console.log("User : " + user + " found in Redis".green);
+                    redis.addView(user, function getVisits(err, reply) {
                         if (err) {
-                          console.error("REDIS error surfaced");
+                            console.error("REDIS error surfaced");
                         }
-                        visitnumber=reply;
+                        visitnumber = reply;
                         //assigning score 4 for database lookup
                         score = 4
                         var lookuptime = elapsed_time(startLookup);
                         console.log("We have got to Redis and the lookup time was : " + lookuptime + " ms ".yellow);
                         callback(null, user, visitnumber, lookuptime, score);
-                      });
+                    });
 
-                    } else {
-                        console.log("User : " + user + " not found in Redis".red);
-                        redis.storeUser(user);
-                        visitnumber = 1;
-                        score = 0;
-                        var lookuptime = elapsed_time(startLookup);
-                        console.log("We have got to Redis and the lookup time was : " + lookuptime + " ms ".yellow);
-                        callback(null, user, visitnumber, lookuptime, score);
-                    }
-                });
+                } else {
+                    console.log("User : " + user + " not found in Redis".red);
+                    redis.storeUser(user);
+                    visitnumber = 1;
+                    score = 0;
+                    var lookuptime = elapsed_time(startLookup);
+                    console.log("We have got to Redis and the lookup time was : " + lookuptime + " ms ".yellow);
+                    callback(null, user, visitnumber, lookuptime, score);
+                }
+            });
 
-              }
+        }
 
     ], function jsonBuilder(err, user, visitnumber, lookuptime, score) {
-
+        //tsv generation and append, synchronously
+          var generatedtsv = tsv.stringify([{
+              id: visitnumber,
+              name: lookuptime
+          }]);
+          fs.appendFileSync('../static/content/data.tsv', generatedtsv, 'utf8');
         var jsonpayload = {
             "score": score,
             "lookuptime": lookuptime,
             "description": "containssss",
             "user": user,
             "visitnumber": visitnumber
-        }
+        };
+
         var output = {
             error: null,
             data: jsonpayload

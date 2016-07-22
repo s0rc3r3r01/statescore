@@ -4,7 +4,7 @@
   <p> Welcome To the State Scoring Application </p>
 </h1>
     <h2>
-    <br> Welcome user: </h2>
+    Welcome user: </h2>
       <h1> {{user}} </h1>
     <h2>It looks like, this is your visit number :</h2>
     <h1>{{visitnumber}} </h1>
@@ -16,9 +16,79 @@
     <div id="scoring">
         <h2> <p> The Score this container was assigned is :</h2>
         <h1> {{score}}</h1>
-        <br>
         <h3>
         <p> description : {{description}} </p>
       </h3>
+      <h2> <p> A first graph of the lookups of this container is :</h2>
+
     </div>
+  <!-- huge statistics script, I've used as starting point the script from simple-statistics http://bl.ocks.org/tmcw/3931800 -->
+  <div id="statistics">
+  <script>
+
+  var margin = {top: 20, right: 20, bottom: 30, left: 50},
+  width = 480 - margin.left - margin.right,
+  height = 250 - margin.top - margin.bottom;
+  
+  var x = d3.scale.linear()
+  .range([0, width]);
+
+  var y = d3.scale.linear()
+  .range([height, 0]);
+
+  var xAxis = d3.svg.axis()
+  .scale(x)
+  .orient("bottom");
+
+  var yAxis = d3.svg.axis()
+  .scale(y)
+  .orient("left");
+
+  var line = d3.svg.line()
+  .x(function(d) { return x(d.id); })
+  .y(function(d) { return y(d.name); });
+  //be advised the svg is inlined by the javascript, I've appended it to a div
+  var svg = d3.select(statistics).append("svg")
+  .attr("width", width + margin.left + margin.right)
+  .attr("height", height + margin.top + margin.bottom)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  d3.tsv("/content/data.tsv", function(error, data) {
+    data.forEach(function(d) {
+      d.id = +d.id;
+      d.name = +d.name;
+    });
+
+    x.domain(d3.extent(data, function(d) { return d.id; }));
+    y.domain(d3.extent(data, function(d) { return d.name; }));
+
+    svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")")
+    .call(xAxis)
+    .append("text")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text(" View");
+    ;
+
+    svg.append("g")
+    .attr("class", "y axis")
+    .call(yAxis)
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 6)
+    .attr("dy", ".71em")
+    .style("text-anchor", "end")
+    .text(" Time in ms");
+
+    svg.append("path")
+    .datum(data)
+    .attr("class", "line")
+    .attr("d", line);
+  });
+  </script>
+</div>
 </div>
