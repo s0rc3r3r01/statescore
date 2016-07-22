@@ -4,6 +4,7 @@ var async = require('async'),
     uuid = require('node-uuid'),
     memory = require('./memory'),
     colors = require('colors'),
+    redis = require('./redis'),
     volume = require('./volume');
 
 exports.version = "0.0.1";
@@ -57,9 +58,9 @@ exports.incomingConnectionHandler = function(req, res) {
                 //provisional procedure storing the user in memory
                 // no the user does not exist in memory, continue lookup
             }
-            */
+
             if (volume.checkDisk(user)) {
-                console.log("User : " + user + " found in file".red);
+                console.log("User : " + user + " found in file".green);
                 volume.addView(user);
                 visitnumber = volume.countViews(user);
                 //assigning score 2 for disk lookup
@@ -67,6 +68,20 @@ exports.incomingConnectionHandler = function(req, res) {
             } else {
                 console.log("User : " + user + " not found in file".red);
                 volume.storeUser(user);
+                visitnumber = 1;
+                score = 0;
+            }
+            */
+            if (redis.checkRedis(user)) {
+              console.log("User : " + user + " found in Redis".green);
+              redis.addView(user);
+              visitnumber = redis.countViews(user);
+              //assigning score 4 for database lookup
+              score = 4
+            }
+            else {
+                console.log("User : " + user + " not found in Redis".red);
+                redis.storeUser(user);
                 visitnumber = 1;
                 score = 0;
             }
