@@ -9,8 +9,12 @@ cookieParser = require('cookie-parser');
 
 //initilizing Express
 var app = express();
+
+//logging enabling
+var accessLogStream = fs.createWriteStream(__dirname + '/../logs/node.log', {flags: 'a'})
+
 //enabling tracking components for express
-app.use(morgan('dev'))
+app.use(morgan('dev', {stream: accessLogStream}))
     .use(cookieParser())
     .use(responseTime())
 
