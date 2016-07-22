@@ -44,7 +44,7 @@ exports.storeUser = function(user) {
     try {
         fs.appendFileSync('../userlist/users', user + ":0001:", 'utf8');
     } catch (e) {
-        console.err(e.red);
+        console.error(e.red);
     }
     console.log("stored user: " + user.yellow);
 }

@@ -41,8 +41,8 @@ exports.incomingConnectionHandler = function(req, res) {
             //this function should call the memory, disk, database, lookup for a user and if the user does not exist add him up
             // if he exists, increment the view count
             //timing logic
-            var startLookup = process.hrtime();
             //starting with memory
+            var startLookup = process.hrtime();
             //checking user existance
             /*
             if (memory.checkmemory(user)) {
@@ -72,27 +72,36 @@ exports.incomingConnectionHandler = function(req, res) {
                 score = 0;
             }
             */
-            if (redis.checkRedis(user)) {
-              console.log("User : " + user + " found in Redis".green);
-              redis.addView(user);
-              visitnumber = redis.countViews(user);
-              //assigning score 4 for database lookup
-              score = 4
-            }
-            else {
-                console.log("User : " + user + " not found in Redis".red);
-                redis.storeUser(user);
-                visitnumber = 1;
-                score = 0;
-            }
+            redis.checkRedis(user, function(err, reply) {
+                    if (reply) {
+                        console.log("User : " + user + " found in Redis".green);
+                        redis.addView(user, function getVisits(err, reply) {
+                        if (err) {
+                          console.error("REDIS error surfaced");
+                        }
+                        visitnumber=reply;
+                        //assigning score 4 for database lookup
+                        score = 4
+                        var lookuptime = elapsed_time(startLookup);
+                        console.log("We have got to Redis and the lookup time was : " + lookuptime + " ms ".yellow);
+                        callback(null, user, visitnumber, lookuptime, score);
+                      });
 
-            var lookuptime = elapsed_time(startLookup);
-            console.log("The lookup time was : " + lookuptime + " ms ".yellow)
-            callback(null, user, visitnumber, lookuptime, score);
+                    } else {
+                        console.log("User : " + user + " not found in Redis".red);
+                        redis.storeUser(user);
+                        visitnumber = 1;
+                        score = 0;
+                        var lookuptime = elapsed_time(startLookup);
+                        console.log("We have got to Redis and the lookup time was : " + lookuptime + " ms ".yellow);
+                        callback(null, user, visitnumber, lookuptime, score);
+                    }
+                });
 
-        },
+              }
 
     ], function jsonBuilder(err, user, visitnumber, lookuptime, score) {
+
         var jsonpayload = {
             "score": score,
             "lookuptime": lookuptime,
