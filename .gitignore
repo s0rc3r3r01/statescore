@@ -2,6 +2,8 @@
 #original version available at : https://github.com/github/gitignore/blob/master/Node.gitignore
 # Link accessed on : 21st July 2016
 
+#data.tsv
+static/content/data.tsv
 
 # Logs
 logs
