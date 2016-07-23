@@ -5,18 +5,14 @@ var express = require('express'),
     morgan = require('morgan'),
     scoring = require('./handlers/scoring.js'),
     responseTime = require('response-time'),
-    cookieParser = require('cookie-parser');
+    cookieParser = require('cookie-parser'),
+    path = require('path');
 
 //initilizing Express
 var app = express();
 
-//enabling logging 
-if (!fs.existsSync('/../logs/)')) {
-    fs.mkdirSync('/../logs/');
-}
-var accessLogStream = fs.createWriteStream(__dirname + '/../logs/node.log', {
-    flags: 'a'
-})
+//enabling logging
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/node.log'), {flags: 'a'})
 
 //enabling tracking components for express
 app.use(morgan('dev', {

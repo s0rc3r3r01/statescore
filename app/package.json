@@ -11,6 +11,7 @@
     "cookie-parser" : "x",
     "node-uuid" : "x",
     "colors" : "x",
-    "redis": "x"
+    "redis": "x",
+    "path": "x"
   }
 }
