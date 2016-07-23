@@ -13,4 +13,4 @@ RUN apt-get -y install git
 WORKDIR /opt/
 EXPOSE 8080 80 6379
 ADD startup.sh /opt/
-ENTRYPOINT /opt/startup.sh
+CMD /opt/startup.sh
