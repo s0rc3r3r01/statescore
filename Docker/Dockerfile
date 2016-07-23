@@ -7,7 +7,10 @@ RUN apt-get -y update && \
     mkdir -p /var/log/nodeapp && \
     rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-WORKDIR /opt/nodeapp
+RUN apt-get update
+RUN apt-get -y install git
 
-
+WORKDIR /opt/
 EXPOSE 8080 80 6379
+ADD startup.sh /opt/
+ENTRYPOINT /opt/startup.sh
