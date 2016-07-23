@@ -1,20 +1,27 @@
 //Description: Scoring application to define statefulness of a system
 
 var express = require('express'),
-fs = require('fs'),
-morgan = require('morgan'),
-scoring = require('./handlers/scoring.js'),
-responseTime = require('response-time'),
-cookieParser = require('cookie-parser');
+    fs = require('fs'),
+    morgan = require('morgan'),
+    scoring = require('./handlers/scoring.js'),
+    responseTime = require('response-time'),
+    cookieParser = require('cookie-parser');
 
 //initilizing Express
 var app = express();
 
-//logging enabling
-var accessLogStream = fs.createWriteStream(__dirname + '../logs/node.log', {flags: 'a'})
+//enabling logging 
+if (!fs.existsSync('/../logs/)')) {
+    fs.mkdirSync('/../logs/');
+}
+var accessLogStream = fs.createWriteStream(__dirname + '/../logs/node.log', {
+    flags: 'a'
+})
 
 //enabling tracking components for express
-app.use(morgan('dev', {stream: accessLogStream}))
+app.use(morgan('dev', {
+        stream: accessLogStream
+    }))
     .use(cookieParser())
     .use(responseTime())
 
@@ -26,13 +33,13 @@ app.use(express.static(__dirname + "/../static"));
 //but it is not as flexible as I want it to be\
 app.get('/v1/statescore.json', scoring.incomingConnectionHandler);
 
-app.get('/', function(req,res){
+app.get('/', function(req, res) {
     res.redirect("/index.html");
     res.end();
 });
 
 app.get('/index.html', function(req, res) {
-//reads the local page and sends that as reply
+    //reads the local page and sends that as reply
     var page = req.params.page_name;
     fs.readFile(
         'index.html',
