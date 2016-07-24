@@ -11,10 +11,8 @@ if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` == ec2 ]; t
     export PUBLICHOSTNAME="$(curl http://169.254.169.254/latest/meta-data/public-hostname/)"
 else
 #if it is not ec2 I assume the image is running on local development
-    export PUBLICHOSTNAME="$(127.0.0.1"
+    export PUBLICHOSTNAME="127.0.0.1"
 fi
-
-
 
 #starting redis
 redis-server --daemonize yes
