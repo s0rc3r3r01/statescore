@@ -45,7 +45,7 @@ app.get('/index.html', function(req, res) {
                 return;
             }
             contents = contents.toString('utf8');
-//replacing the placeholders for the hostname with environment variable7
+//replacing the placeholders for the hostname with environment variable
             contents=contents.replace(/REPLACEME/g, process.env.PUBLICHOSTNAME);
             res.writeHead(200, {
                 "Content-Type": "text/html"
