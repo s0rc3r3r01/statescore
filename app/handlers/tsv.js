@@ -49,7 +49,6 @@
         if (!data || !keys) return ''
 
         var result = output+data.map(function(obj){
-          console.log("value of output "+output+" value of data "+data .magenta);
             var item = keys ? {} : []
             var values = keys.reduce(function(p, key){
                 p.push(obj[key])
