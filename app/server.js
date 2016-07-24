@@ -11,8 +11,11 @@ var express = require('express'),
 //initilizing Express
 var app = express();
 
+var memoryStore = "loveme";
 //enabling logging
-var accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/node.log'), {flags: 'a'})
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs/node.log'), {
+    flags: 'a'
+})
 
 //enabling tracking components for express
 app.use(morgan('dev', {
@@ -45,8 +48,8 @@ app.get('/index.html', function(req, res) {
                 return;
             }
             contents = contents.toString('utf8');
-//replacing the placeholders for the hostname with environment variable
-            contents=contents.replace(/REPLACEME/g, process.env.PUBLICHOSTNAME);
+            //replacing the placeholders for the hostname with environment variable
+            contents = contents.replace(/REPLACEME/g, process.env.PUBLICHOSTNAME);
             res.writeHead(200, {
                 "Content-Type": "text/html"
             });
@@ -54,10 +57,25 @@ app.get('/index.html', function(req, res) {
         }
     );
 });
+app.get('/admin', function(req, res) {
+    scoring.memoryStoreManager(req, res, function (err) {
+        if (err) {
+            res.writeHead(404, {
+                "Content-Type": "text/html"
+            });
+            res.end("ADMIN CODE NOT FOUND 404");
+            return;
+        }
+        res.writeHead(200, {
+            "Content-Type": "text/html"
+        })
+        res.end("success");
+    });
+});
 
 app.get("*", function(req, res) {
     res.writeHead(404, {
-        "Content-Type": "application/json"
+        "Content-Type": "text/html"
     });
     res.end("RESOURCE NOT FOUND 404");
 

@@ -46,7 +46,7 @@ exports.storeUser = function(user) {
     } catch (e) {
         console.error(e.red);
     }
-    console.log("stored user: " + user.yellow);
+    console.log("user stored on disk: " + user.yellow);
 }
 
 exports.addView = function(user) {

@@ -43,18 +43,15 @@ exports.addView = function(user,callback) {
     });
 }
 
-exports.checkRedis = function(user, callback) {
+exports.checkDatabase = function(user, callback) {
     client.exists(user, function(err, reply) {
         if (err) {
             console.error("REDIS ERROR".red);
             return;
         }
         if (reply === 1) {
-            console.error("user in redis, from redis.js" .yellow);
             callback(null, true);
         } else {
-
-              console.error("user NOT in redis, from redis.js" .yellow);
             callback (null, false);
         }
     });
