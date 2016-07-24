@@ -13,4 +13,5 @@ RUN apt-get -y install git
 WORKDIR /opt/
 EXPOSE 8080 80 6379
 ADD startup.sh /opt/
+RUN apt-get -y install curl
 CMD /opt/startup.sh

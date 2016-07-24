@@ -4,7 +4,6 @@
 
 #data.tsv
 static/content/data.tsv
-
 # Logs
 *.log
 npm-debug.log*
