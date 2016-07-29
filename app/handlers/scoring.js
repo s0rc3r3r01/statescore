@@ -51,7 +51,7 @@ exports.incomingConnectionHandler = function(req, res) {
             //starting timer
             var startLookup = process.hrtime();
             //assigning default to visitnumber
-            visitnumber=null;
+            visitnumber = null;
             score = null;
 
             if (memory.checkmemory(user)) {
@@ -162,6 +162,14 @@ exports.memoryStoreManager = function(req, res, callback) {
     } else if (req.query.database) {
         memoryStore.database = req.query.database;
         console.log("setting database to ".magenta + req.query.database.magenta);
+        callback(null);
+    } else if (req.query.users) {
+        var generatedtsv = tsv.stringify([{
+            id: "id",
+            name: "name"
+        }]);
+        fs.writeFileSync('../static/content/data.tsv', generatedtsv, 'utf8');
+        console.log("Deleting users from UI tsv file ".magenta);
         callback(null);
     } else {
         console.log("Wrong admin command received !".red);

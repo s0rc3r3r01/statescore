@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>State Scoring Application</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <!-- stylesheet -->
+    <link rel="stylesheet" href="http://REPLACEME:8080/content/style.css" type="text/css" />
+</head>
+
+<body>
+    <div id="center">
+        <br>
+        <h1>
+  <p> Welcome To the State Scoring Application </p>
+  Admin Page
+</h1>
+        <h2>
+You can use the following buttons to interact with the underlying backend</h2>
+        <h1> <p> Control Memory state:
+     <form>
+         <input type="button" onclick='enableState("memory",true)' value="Enable" />
+       <input type="button" onclick='enableState("memory",false)' value="Disable" />
+    </form></h1>
+        <h1>  <form>
+          <p> Control Disk state: </p>
+       <input type="button" onclick='enableState("disk",true)' value="Enable" />
+    <input type="button" onclick='enableState("disk",false)' value="Disable" />
+ </form></h1>
+        <h1>  <form>
+        <p> Control Database state: </p>
+     <input type="button" onclick='enableState("database",true)' value="Enable" />
+  <input type="button" onclick='enableState("database",false)' value="Disable" />
+</form></h1>
+        <h1>  <form>
+<p> Delete user stats in UI: </p>
+<input type="button" onclick='enableState("users",false)' value="Delete" />
+</form></h1>
+
+    </div>
+    <script type="text/javascript">
+        function enableState(state, bool) {
+            var xmlHttp = new XMLHttpRequest();
+            var url = "http://REPLACEME:8080/admin/?" + state + "=" + bool;
+            xmlHttp.open("GET", url, true); // true for asynchronous
+            xmlHttp.send(null);
+        }
+    </script>
+
+</body>
+
+</html>

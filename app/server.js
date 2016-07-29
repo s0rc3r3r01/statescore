@@ -57,6 +57,26 @@ app.get('/index.html', function(req, res) {
         }
     );
 });
+app.get('/admin.html', function(req, res) {
+    //reads the local page and sends that as reply
+    var page = req.params.page_name;
+    fs.readFile(
+        'admin.html',
+        function(err, contents) {
+            if (err) {
+                send_failure(res, err);
+                return;
+            }
+            contents = contents.toString('utf8');
+            //replacing the placeholders for the hostname with environment variable
+            contents = contents.replace(/REPLACEME/g, process.env.PUBLICHOSTNAME);
+            res.writeHead(200, {
+                "Content-Type": "text/html"
+            });
+            res.end(contents);
+        }
+    );
+});
 app.get('/admin', function(req, res) {
     scoring.memoryStoreManager(req, res, function (err) {
         if (err) {
