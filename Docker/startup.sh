@@ -17,6 +17,9 @@ fi
 #starting redis
 redis-server --daemonize yes
 
+#starting logstash
+service logstash start
+
 #installing modules
 npm install
 
