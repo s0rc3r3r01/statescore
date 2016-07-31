@@ -1,5 +1,7 @@
 # statescore
 Statefulness Scoring Application
+
+
 Developed as proof of concept , this is a stateful Node.JS application.
 It is intended to be deployed as base image, it will be used as a test for the degree of statefulness of a containerized
 system.
