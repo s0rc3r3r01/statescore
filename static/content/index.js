@@ -25,7 +25,6 @@ $(function(){
 // replacing the variables
 
         $(document).ajaxStop(function () {
-            	console.log(jsondata);
 		var renderedPage = Mustache.to_html( template, jsondata );
             $("body").html( renderedPage );
         })
