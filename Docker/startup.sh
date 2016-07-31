@@ -8,7 +8,7 @@ git clone https://github.com/s0rc3r3r01/statescore.git /opt/nodeapp
 cd /opt/nodeapp/app
 #setting environment variable with hostname - AWS SPECIFIC
 if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` == ec2 ]; then
-    export PUBLICHOSTNAME="$(curl http://169.254.169.254/latest/meta-data/public-hostname/)"
+    export PUBLICHOSTNAME="$(curl http://169.254.169.254/latest/meta-data/public-ipv4/)"
 else
 #if it is not ec2 I assume the image is running on local development
     export PUBLICHOSTNAME="localhost"
