@@ -8,6 +8,7 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     path = require('path');
 
+
 //initilizing Express
 var app = express();
 
@@ -49,7 +50,11 @@ app.get('/index.html', function(req, res) {
             }
             contents = contents.toString('utf8');
             //replacing the placeholders for the hostname with environment variable
-            contents = contents.replace(/REPLACEME/g, process.env.PUBLICHOSTNAME);
+            if (process.env.PUBLICHOSTNAME) {
+                contents = contents.replace(/REPLACEME/g, process.env.PUBLICHOSTNAME);
+            } else {
+                contents = contents.replace(/REPLACEME/g, "localhost");
+            }
             res.writeHead(200, {
                 "Content-Type": "text/html"
             });
@@ -69,7 +74,11 @@ app.get('/admin.html', function(req, res) {
             }
             contents = contents.toString('utf8');
             //replacing the placeholders for the hostname with environment variable
-            contents = contents.replace(/REPLACEME/g, process.env.PUBLICHOSTNAME);
+            if (process.env.PUBLICHOSTNAME) {
+                contents = contents.replace(/REPLACEME/g, process.env.PUBLICHOSTNAME);
+            } else {
+                contents = contents.replace(/REPLACEME/g, "localhost");
+            }
             res.writeHead(200, {
                 "Content-Type": "text/html"
             });
@@ -78,7 +87,7 @@ app.get('/admin.html', function(req, res) {
     );
 });
 app.get('/admin', function(req, res) {
-    scoring.memoryStoreManager(req, res, function (err) {
+    scoring.memoryStoreManager(req, res, function(err) {
         if (err) {
             res.writeHead(404, {
                 "Content-Type": "text/html"

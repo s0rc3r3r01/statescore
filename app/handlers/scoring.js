@@ -8,6 +8,12 @@ var async = require('async'),
     disk = require('./disk'),
     tsv = require('./tsv');
 
+var logger = require('logzio-nodejs').createLogger({
+    token: 'JXRoIzOAwOjKkIZrZWcYnTtlnHxUhAcv',
+    debug: true
+});
+
+
 exports.version = "0.0.2";
 //explicit definition of user, used for variable scope
 
@@ -36,6 +42,11 @@ exports.incomingConnectionHandler = function(req, res) {
             if (req.cookies.user) {
                 user = req.cookies.user;
                 console.log("Returning user with cookie : " + user.yellow);
+                var obj = {
+                    message: 'Returning user with cookie : '+user,
+                    userid: user
+                };
+                logger.log(obj);
             } else {
                 user = uuid.v4();
                 res.cookie("user", user, {
