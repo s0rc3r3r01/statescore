@@ -10,7 +10,7 @@
     "response-time" : "x",
     "cookie-parser" : "x",
     "node-uuid" : "x",
-    "colour" : "x",
+    "colors" : "x",
     "redis": "x",
     "path": "x"
   }
