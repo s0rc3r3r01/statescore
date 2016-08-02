@@ -12,6 +12,7 @@
     "node-uuid" : "x",
     "colors" : "x",
     "redis": "x",
-    "path": "x"
+    "path": "x",
+    "logstash-client": "x"
   }
 }

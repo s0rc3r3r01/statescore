@@ -6,7 +6,8 @@ var async = require('async'),
     colors = require('colors'),
     database = require('./database'),
     disk = require('./disk'),
-    tsv = require('./tsv');
+    tsv = require('./tsv'),
+    Logstash = require('logstash-client');
 
 
 exports.version = "0.0.2";
@@ -17,7 +18,12 @@ var user,
         memory: false,
         disk: false,
         database: false
-    };
+    },
+    logstash = new Logstash({
+        type: 'tcp', // udp, tcp, memory
+        host: 'localhost',
+        port: 9000
+    });;
 
 //timer function, converts hrtime to ms
 function elapsed_time(past) {
@@ -36,6 +42,12 @@ exports.incomingConnectionHandler = function(req, res) {
             // user.
             if (req.cookies.user) {
                 user = req.cookies.user;
+                logstash.send({
+                    '@timestamp': new Date(),
+                    'message': 'Returning user with cookie : '+user,
+                    'user' : user,
+                    'level': 'error'
+                });
                 console.log("Returning user with cookie : " + user.yellow);
             } else {
                 user = uuid.v4();
