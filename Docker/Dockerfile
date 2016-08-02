@@ -9,9 +9,9 @@ RUN apt-get -y update && \
 #    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 RUN apt-get -y install openjdk-8-jre-headless wget
-RUN wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
-RUN echo "deb https://packages.elastic.co/logstash/2.3/debian stable main" | tee -a /etc/apt/sources.list
-RUN apt-get update && apt-get install logstash
+RUN wget -qO - http://packages.elastic.co/GPG-KEY-elasticsearch | apt-key add -
+RUN echo "deb http://packages.elastic.co/logstash/2.3/debian stable main" | tee -a /etc/apt/sources.list
+RUN apt-get update && apt-get -y install logstash
 WORKDIR /opt/
 EXPOSE 8080 80 6379
 ADD startup.sh /opt/

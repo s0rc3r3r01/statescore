@@ -2,10 +2,10 @@
 #simple startup script for nodeapp server
 
 #git clone of storeapp from remote server
-git clone https://github.com/s0rc3r3r01/statescore.git /opt/nodeapp
+git clone https://github.com/s0rc3r3r01/statescore.git /opt/statescore
 
 #workdir known from Dockerfile, changing to app directory
-cd /opt/nodeapp/app
+cd /opt/statescore/app
 #setting environment variable with hostname - AWS SPECIFIC
 if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` == ec2 ]; then
     export PUBLICHOSTNAME="$(curl http://169.254.169.254/latest/meta-data/public-ipv4/)"
@@ -18,7 +18,7 @@ fi
 redis-server --daemonize yes
 
 #copying latest logstash configuration
-cp /opt/node.conf /etc/logstash/conf.d
+cp /opt/statescore/logstash/node.conf /etc/logstash/conf.d
 
 #starting logstash
 service logstash start
