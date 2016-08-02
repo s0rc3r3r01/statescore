@@ -73,12 +73,12 @@ exports.incomingConnectionHandler = function(req, res) {
                     'store': 'memory',
                     'message': 'User Found in memory' + user + ' the lookup time was '+lookuptime,
                     'user': user,
-                    'lookuptime' : lookuptime;
+                    'lookuptime' : lookuptime
                 });
             } else {
               logger.logEvent({
                   'store': 'memory',
-                  'message': 'User NOT Found in memory' + user,
+                  'message': 'User NOT Found in memory ' + user,
                   'user': user
               });
                 // no the user does not exist in memory, continue lookup
