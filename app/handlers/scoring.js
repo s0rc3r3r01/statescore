@@ -7,10 +7,10 @@ var async = require('async'),
     database = require('./database'),
     disk = require('./disk'),
     tsv = require('./tsv'),
-    Logstash = require('logstash-client');
+    logger = require('./logger');
 
 
-exports.version = "0.0.2";
+exports.version = "0.0.3";
 //explicit definition of user, used for variable scope
 
 var user,
@@ -18,12 +18,7 @@ var user,
         memory: false,
         disk: false,
         database: false
-    },
-    logstash = new Logstash({
-        type: 'tcp', // udp, tcp, memory
-        host: 'localhost',
-        port: 9000
-    });;
+    };
 
 //timer function, converts hrtime to ms
 function elapsed_time(past) {
@@ -42,19 +37,19 @@ exports.incomingConnectionHandler = function(req, res) {
             // user.
             if (req.cookies.user) {
                 user = req.cookies.user;
-                logstash.send({
-                    '@timestamp': new Date(),
-                    'message': 'Returning user with cookie : '+user,
-                    'user' : user,
-                    'level': 'error'
+                logger.logEvent({
+                    'message': 'Returning user with cookie :' + user,
+                    'user': user
                 });
-                console.log("Returning user with cookie : " + user.yellow);
             } else {
                 user = uuid.v4();
                 res.cookie("user", user, {
                     "expires": new Date(Date.now() + 100000000)
                 });
-                console.log("New Incoming User, cookie assigned : " + user.green);
+                logger.logEvent({
+                    'message': 'New Incoming User, cookie assigned : ' + user,
+                    'user': user
+                });
             }
             callback(null, user);
         },
@@ -68,16 +63,24 @@ exports.incomingConnectionHandler = function(req, res) {
             score = null;
 
             if (memory.checkmemory(user)) {
-                console.log(colors.green("User : " + user + " found in memory".green));
                 //add the view and then read the visit number !
                 memory.addView(user);
                 visitnumber = memory.countViews(user);
                 //assigning score 1 for memory lookup
                 score = 1;
                 var lookuptime = elapsed_time(startLookup);
-                console.log(colors.magenta("The lookup time was : " + lookuptime + " ms "));
+                logger.logEvent({
+                    'store': 'memory',
+                    'message': 'User Found in memory' + user + ' the lookup time was '+lookuptime,
+                    'user': user,
+                    'lookuptime' : lookuptime;
+                });
             } else {
-                console.log("User : " + user + " not found in memory".red);
+              logger.logEvent({
+                  'store': 'memory',
+                  'message': 'User NOT Found in memory' + user,
+                  'user': user
+              });
                 // no the user does not exist in memory, continue lookup
             }
 
