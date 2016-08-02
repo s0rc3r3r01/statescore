@@ -17,6 +17,9 @@ fi
 #starting redis
 redis-server --daemonize yes
 
+#copying latest logstash configuration
+cp /opt/node.conf /etc/logstash/conf.d
+
 #starting logstash
 service logstash start
 
