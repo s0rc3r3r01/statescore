@@ -12,7 +12,7 @@ var logstash = new Logstash({
 
 
 exports.logEvent = function(obj, callback) {
-obj.@timestamp = new Date();
+obj.timestamp = new Date();
 obj.containerid = process.env.hostname;
 obj.machineid = process.env.host_hostname;
 logstash.send(obj);
