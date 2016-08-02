@@ -78,7 +78,7 @@ exports.incomingConnectionHandler = function(req, res) {
             } else {
               logger.logEvent({
                   'store': 'memory',
-                  'message': 'User NOT Found in memory' + user,
+                  'message': 'User NOT Found in memory ' + user,
                   'user': user
               });
                 // no the user does not exist in memory, continue lookup
