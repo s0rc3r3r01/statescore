@@ -16,7 +16,6 @@ exports.logEvent = function(obj, callback) {
     obj.timestamp = new Date();
     obj.containerid = os.hostname();
     obj.machineid = process.env.HOST_HOSTNAME;
-    console.log("process.env.HOST_HOSTNAME "+process.env.HOST_HOSTNAME);
     logstash.send(obj);
     if (obj.level == 'error') {
         console.log(obj.message.red);
