@@ -71,48 +71,76 @@ exports.incomingConnectionHandler = function(req, res) {
                 var lookuptime = elapsed_time(startLookup);
                 logger.logEvent({
                     'store': 'memory',
-                    'message': 'User Found in memory' + user + ' the lookup time was '+lookuptime,
+                    'message': 'User Found in memory' + user + ' the lookup time was ' + lookuptime,
                     'user': user,
-                    'lookuptime' : lookuptime
+                    'found': 'true'
+                    'lookuptime': lookuptime
                 });
             } else {
-              logger.logEvent({
-                  'store': 'memory',
-                  'message': 'User NOT Found in memory ' + user,
-                  'user': user
-              });
+                logger.logEvent({
+                    'store': 'memory',
+                    'message': 'User NOT Found in memory ' + user,
+                    'user': user,
+                    'found': 'false'
+                });
                 // no the user does not exist in memory, continue lookup
             }
 
             if (disk.checkDisk(user)) {
-                console.log(colors.green("User : " + user + " found in disk"));
                 visitnumber = disk.countViews(user);
                 disk.addView(user);
                 //assigning score 2 for disk lookup
                 score = 2
                 var lookuptime = elapsed_time(startLookup);
-                console.log(colors.magenta("The lookup time was : " + lookuptime + " ms "));
+                logger.logEvent({
+                    'store': 'disk',
+                    'message': 'User found in disk ' + user + ' the lookup time was ' + lookuptime,
+                    'user': user,
+                    'found': 'true',
+                    'lookuptime': lookuptime
+                });
             } else {
-                console.log("User : " + user + " not found in disk".red);
+
+                logger.logEvent({
+                    'store': 'disk',
+                    'message': 'User NOT Found in disk ' + user,
+                    'user': user,
+                    'found': 'false'
+                });
             }
             database.checkDatabase(user, function(err, reply) {
                 if (reply) {
-                    console.log(colors.green("User : " + user + " found in database"));
                     database.addView(user, function getVisits(err, reply) {
                         if (err) {
-                            console.error("database error surfaced");
+                            logger.logEvent({
+                                'store': 'database',
+                                'message': 'Database error surfaced ',
+                                'user': user,
+                                'level': 'error'
+                            });
                         }
                         visitnumber = reply;
                         //assigning score 4 for database lookup
                         score = 4
                         var lookuptime = elapsed_time(startLookup);
-                        console.log(colors.magenta("The lookup time was : " + lookuptime + " ms "));
+                        logger.logEvent({
+                            'store': 'database',
+                            'message': 'User found in database ' + user + ' the lookup time was ' + lookuptime,
+                            'user': user,
+                            'found': 'true',
+                            'lookuptime': lookuptime
+                        });
                         callback(null, user, visitnumber, lookuptime, score);
                     });
                 } else {
-                    console.log("User : " + user + " not found in database".red);
                     var lookuptime = elapsed_time(startLookup);
-                    console.log(colors.magenta("The lookup time was : " + lookuptime + " ms "));
+                    logger.logEvent({
+                        'store': 'database',
+                        'message': 'User not found in database ' + user + ' the complete lookup time was ' + lookuptime,
+                        'user': user,
+                        'found': 'false',
+                        'lookuptime': lookuptime
+                    });
                     callback(null, user, visitnumber, lookuptime, score);
                 }
             });
