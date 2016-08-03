@@ -29,147 +29,141 @@ function elapsed_time(past) {
 
 //this function
 exports.incomingConnectionHandler = function(req, res) {
-    async.waterfall([
-        function userRecognizer(callback) {
-            //only cookie management, no database interaction
-            //the logic here is : if the user has a cookie, I trust him as a known user, I do not
-            // look him up.  If he doesn't have a cookie I give him a new one. I assume a well-behaved
-            // user.
-            if (req.cookies.user) {
-                user = req.cookies.user;
-                logger.logEvent({
-                    'message': 'Returning user with cookie :' + user,
-                    'user': user
-                });
-            } else {
-                user = uuid.v4();
-                res.cookie("user", user, {
-                    "expires": new Date(Date.now() + 100000000)
-                });
-                logger.logEvent({
-                    'message': 'New Incoming User, cookie assigned : ' + user,
-                    'user': user
-                });
-            }
-            callback(null, user);
-        },
-        function userLookup(user, callback) {
-            //this function should call the memory, disk, database, lookup for a user and if the
-            // user does not exist add him up; if he exists, increment the view count
-            //starting timer
-            var startLookup = process.hrtime();
-            //assigning default to visitnumber
-            visitnumber = null;
-            score = null;
-
-            if (memory.checkmemory(user)) {
-                //add the view and then read the visit number !
-                memory.addView(user);
-                visitnumber = memory.countViews(user);
-                //assigning score 1 for memory lookup
-                score = 1;
-                var lookuptime = elapsed_time(startLookup);
-                logger.logEvent({
-                    'store': 'memory',
-                    'message': 'User Found in memory ' + user + ' the lookup time was ' + lookuptime,
-                    'user': user,
-                    'found': 'true',
-                    'score': score,
-                    'lookuptime': lookuptime
-                });
-            } else {
-                logger.logEvent({
-                    'store': 'memory',
-                    'message': 'User NOT Found in memory ' + user,
-                    'user': user,
-                    'found': 'false'
-                });
-                // no the user does not exist in memory, continue lookup
-            }
-
-            if (disk.checkDisk(user)) {
-                visitnumber = disk.countViews(user);
-                disk.addView(user);
-                //assigning score 2 for disk lookup
-                score = 2
-                var lookuptime = elapsed_time(startLookup);
-                logger.logEvent({
-                    'store': 'disk',
-                    'message': 'User found in disk ' + user + ' the lookup time was ' + lookuptime,
-                    'user': user,
-                    'found': 'true',
-                    'score': score,
-                    'lookuptime': lookuptime
-                });
-            } else {
-
-                logger.logEvent({
-                    'store': 'disk',
-                    'message': 'User NOT Found in disk ' + user,
-                    'user': user,
-                    'found': 'false'
-                });
-            }
-            database.checkDatabase(user, function(err, reply) {
-                if (reply) {
-                    database.addView(user, function getVisits(err, reply) {
-                        if (err) {
+        async.waterfall([
+                    function userRecognizer(callback) {
+                        //only cookie management, no database interaction
+                        //the logic here is : if the user has a cookie, I trust him as a known user, I do not
+                        // look him up.  If he doesn't have a cookie I give him a new one. I assume a well-behaved
+                        // user.
+                        if (req.cookies.user) {
+                            user = req.cookies.user;
                             logger.logEvent({
-                                'store': 'database',
-                                'message': 'Database error surfaced ',
-                                'user': user,
-                                'level': 'error'
+                                'message': 'Returning user with cookie :' + user,
+                                'user': user
+                            });
+                        } else {
+                            user = uuid.v4();
+                            res.cookie("user", user, {
+                                "expires": new Date(Date.now() + 100000000)
+                            });
+                            logger.logEvent({
+                                'message': 'New Incoming User, cookie assigned : ' + user,
+                                'user': user
                             });
                         }
-                        visitnumber = reply;
-                        //assigning score 4 for database lookup
-                        score = 4
+                        callback(null, user);
+                    },
+                    function userLookup(user, callback) {
+                        //this function should call the memory, disk, database, lookup for a user and if the
+                        // user does not exist add him up; if he exists, increment the view count
+                        //starting timer
+                        var startLookup = process.hrtime();
+                        //assigning default to visitnumber
+                        visitnumber = null;
+                        score = null;
+
+                        if (memory.checkmemory(user)) {
+                            //add the view and then read the visit number !
+                            memory.addView(user);
+                            visitnumber = memory.countViews(user);
+                            //assigning score 1 for memory lookup
+                            score = 1;
+                            var lookuptime = elapsed_time(startLookup);
+                            logger.logEvent({
+                                'store': 'memory',
+                                'message': 'User Found in memory ' + user + ' the lookup time was ' + lookuptime,
+                                'user': user,
+                                'found': 'true',
+                                'score': score,
+                                'visitnumber': visitnumber,
+                                'lookuptime': lookuptime
+                            });
+                        }  else {
+                            console.log("User NOT found in memory " + user.yellow);
+                        }
+                    // no the user does not exist in memory, continue lookup
+
+                if (disk.checkDisk(user)) {
+                    visitnumber = disk.countViews(user);
+                    disk.addView(user);
+                    //assigning score 2 for disk lookup
+                    score = 2
+                    var lookuptime = elapsed_time(startLookup);
+                    logger.logEvent({
+                        'store': 'disk',
+                        'message': 'User found in disk ' + user + ' the lookup time was ' + lookuptime,
+                        'user': user,
+                        'found': 'true',
+                        'score': score,
+                        'visitnumber': visitnumber,
+                        'lookuptime': lookuptime
+                    });
+                } else {
+
+                    console.log("User NOT found in disk " + user.yellow);
+                }
+                database.checkDatabase(user, function(err, reply) {
+                    if (reply) {
+                        database.addView(user, function getVisits(err, reply) {
+                            if (err) {
+                                logger.logEvent({
+                                    'store': 'database',
+                                    'message': 'Database error surfaced ',
+                                    'user': user,
+                                    'level': 'error'
+                                });
+                            }
+                            visitnumber = reply;
+                            //assigning score 4 for database lookup
+                            score = 4
+                            var lookuptime = elapsed_time(startLookup);
+                            logger.logEvent({
+                                'store': 'database',
+                                'message': 'User found in database ' + user + ' the lookup time was ' + lookuptime,
+                                'user': user,
+                                'found': 'true',
+                                'score': score,
+                                'visitnumber': visitnumber,
+                                'lookuptime': lookuptime
+                            });
+                            callback(null, user, visitnumber, lookuptime, score);
+                        });
+                    } else {
                         var lookuptime = elapsed_time(startLookup);
                         logger.logEvent({
                             'store': 'database',
-                            'message': 'User found in database ' + user + ' the lookup time was ' + lookuptime,
+                            'message': 'User not even found in database ' + user + ' the complete lookup time was ' + lookuptime,
                             'user': user,
-                            'found': 'true',
-                            'score': score,
+                            'found': 'false',
+                            'score': 0,
                             'lookuptime': lookuptime
                         });
                         callback(null, user, visitnumber, lookuptime, score);
-                    });
-                } else {
-                    var lookuptime = elapsed_time(startLookup);
-                    logger.logEvent({
-                        'store': 'database',
-                        'message': 'User not even found in database ' + user + ' the complete lookup time was ' + lookuptime,
-                        'user': user,
-                        'found': 'false',
-                        'score': 0,
-                        'lookuptime': lookuptime
-                    });
+                    }
+                });
+            },
+            //the logic here is that the application should perform a lookup for the user first and then store it if some options are enabled
+            // because of the way Node works, it means that some variables need to be passed to the next function, as they area
+            function userAdd(user, visitnumber, lookuptime, score, callback) {
+                // execute only if the score is 0 and the user is not available anywhere
+                if (score == null) {
+                    if (memoryStore.memory) {
+                        memory.storeUser(user);
+                    }
+                    if (memoryStore.disk) {
+                        disk.storeUser(user);
+                    }
+                    if (memoryStore.database) {
+                        database.storeUser(user);
+                    }
+                    visitnumber = 1;
                     callback(null, user, visitnumber, lookuptime, score);
                 }
-            });
-        },
-        //the logic here is that the application should perform a lookup for the user first and then store it if some options are enabled
-        // because of the way Node works, it means that some variables need to be passed to the next function, as they area
-        function userAdd(user, visitnumber, lookuptime, score, callback) {
-            // execute only if the score is 0 and the user is not available anywhere
-            if (score == null) {
-                if (memoryStore.memory) {
-                    memory.storeUser(user);
-                }
-                if (memoryStore.disk) {
-                    disk.storeUser(user);
-                }
-                if (memoryStore.database) {
-                    database.storeUser(user);
-                }
-                visitnumber = 1;
                 callback(null, user, visitnumber, lookuptime, score);
             }
-            callback(null, user, visitnumber, lookuptime, score);
-        }
 
-    ], function jsonBuilder(err, user, visitnumber, lookuptime, score) {
+    ],
+    function jsonBuilder(err, user, visitnumber, lookuptime, score) {
         //tsv generation and append, synchronously
         var generatedtsv = tsv.stringify([{
             id: visitnumber,
