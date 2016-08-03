@@ -72,7 +72,6 @@ app.get('./loaderio-ae9c96b7cd2f05b770ff7f5e2c92694b.html', function(req, res) {
             res.end(contents);
         }
     );
-});
 
 
 
