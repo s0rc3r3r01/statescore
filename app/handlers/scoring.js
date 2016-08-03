@@ -7,7 +7,8 @@ var async = require('async'),
     database = require('./database'),
     disk = require('./disk'),
     tsv = require('./tsv'),
-    logger = require('./logger');
+    logger = require('./logger'),
+    os = require('os');
 
 
 exports.version = "0.0.3";
@@ -129,13 +130,15 @@ exports.incomingConnectionHandler = function(req, res) {
                             callback(null, user, visitnumber, lookuptime, score);
                         });
                     } else {
+                      //user not found in the database nor anywhere, assigning score zero
+                      score = 0
                         var lookuptime = elapsed_time(startLookup);
                         logger.logEvent({
                             'store': 'database',
                             'message': 'User not even found in database ' + user + ' the complete lookup time was ' + lookuptime,
                             'user': user,
                             'found': 'false',
-                            'score': 0,
+                            'score': score,
                             'lookuptime': lookuptime
                         });
                         callback(null, user, visitnumber, lookuptime, score);
@@ -175,7 +178,9 @@ exports.incomingConnectionHandler = function(req, res) {
             "lookuptime": lookuptime,
             "description": "containssss",
             "user": user,
-            "visitnumber": visitnumber
+            "visitnumber": visitnumber,
+            "containerid" : os.hostname(),
+            "machineid" : process.env.HOST_HOSTNAME
         };
 
         var output = {
