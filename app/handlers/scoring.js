@@ -71,7 +71,7 @@ exports.incomingConnectionHandler = function(req, res) {
                 var lookuptime = elapsed_time(startLookup);
                 logger.logEvent({
                     'store': 'memory',
-                    'message': 'User Found in memory' + user + ' the lookup time was ' + lookuptime,
+                    'message': 'User Found in memory ' + user + ' the lookup time was ' + lookuptime,
                     'user': user,
                     'found': 'true',
                     'lookuptime': lookuptime
