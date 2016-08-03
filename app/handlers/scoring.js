@@ -149,7 +149,7 @@ exports.incomingConnectionHandler = function(req, res) {
             // because of the way Node works, it means that some variables need to be passed to the next function, as they area
             function userAdd(user, visitnumber, lookuptime, score, callback) {
                 // execute only if the score is 0 and the user is not available anywhere
-                if (score == null) {
+                if (score === 0) {
                     if (memoryStore.memory) {
                         memory.storeUser(user);
                     }
