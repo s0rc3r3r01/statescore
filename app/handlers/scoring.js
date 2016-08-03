@@ -73,7 +73,7 @@ exports.incomingConnectionHandler = function(req, res) {
                     'store': 'memory',
                     'message': 'User Found in memory' + user + ' the lookup time was ' + lookuptime,
                     'user': user,
-                    'found': 'true'
+                    'found': 'true',
                     'lookuptime': lookuptime
                 });
             } else {
