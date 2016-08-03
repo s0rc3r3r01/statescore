@@ -74,6 +74,7 @@ exports.incomingConnectionHandler = function(req, res) {
                     'message': 'User Found in memory ' + user + ' the lookup time was ' + lookuptime,
                     'user': user,
                     'found': 'true',
+                    'score': score,
                     'lookuptime': lookuptime
                 });
             } else {
@@ -97,6 +98,7 @@ exports.incomingConnectionHandler = function(req, res) {
                     'message': 'User found in disk ' + user + ' the lookup time was ' + lookuptime,
                     'user': user,
                     'found': 'true',
+                    'score': score,
                     'lookuptime': lookuptime
                 });
             } else {
@@ -128,6 +130,7 @@ exports.incomingConnectionHandler = function(req, res) {
                             'message': 'User found in database ' + user + ' the lookup time was ' + lookuptime,
                             'user': user,
                             'found': 'true',
+                            'score': score,
                             'lookuptime': lookuptime
                         });
                         callback(null, user, visitnumber, lookuptime, score);
@@ -136,9 +139,10 @@ exports.incomingConnectionHandler = function(req, res) {
                     var lookuptime = elapsed_time(startLookup);
                     logger.logEvent({
                         'store': 'database',
-                        'message': 'User not found in database ' + user + ' the complete lookup time was ' + lookuptime,
+                        'message': 'User not even found in database ' + user + ' the complete lookup time was ' + lookuptime,
                         'user': user,
                         'found': 'false',
+                        'score': 0,
                         'lookuptime': lookuptime
                     });
                     callback(null, user, visitnumber, lookuptime, score);
