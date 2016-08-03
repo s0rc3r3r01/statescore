@@ -61,7 +61,7 @@ exports.incomingConnectionHandler = function(req, res) {
                         var startLookup = process.hrtime();
                         //assigning default to visitnumber
                         visitnumber = null;
-                        score = null;
+                        score = 0;
 
                         if (memory.checkmemory(user)) {
                             //add the view and then read the visit number !
@@ -131,7 +131,6 @@ exports.incomingConnectionHandler = function(req, res) {
                         });
                     } else {
                       //user not found in the database nor anywhere, assigning score zero
-                      score = 0
                         var lookuptime = elapsed_time(startLookup);
                         logger.logEvent({
                             'store': 'database',
