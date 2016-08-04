@@ -6,13 +6,15 @@ git clone https://github.com/s0rc3r3r01/statescore.git /opt/statescore
 
 #workdir known from Dockerfile, changing to app directory
 cd /opt/statescore/app
+
 #setting environment variable with hostname - AWS SPECIFIC
-if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` == ec2 ]; then
-    export PUBLICHOSTNAME="$(curl http://169.254.169.254/latest/meta-data/public-ipv4/)"
-else
+# commmented out as Google Cloud as been put in use for Kubernetes
+#if [ -f /sys/hypervisor/uuid ] && [ `head -c 3 /sys/hypervisor/uuid` == ec2 ]; then
+#    export PUBLICHOSTNAME="$(curl http://169.254.169.254/latest/meta-data/public-ipv4/)"
+#else
 #if it is not ec2 I assume the image is running on local development
-    export PUBLICHOSTNAME="localhost"
-fi
+#    export PUBLICHOSTNAME="localhost"
+#fi
 
 #starting redis
 redis-server --daemonize yes

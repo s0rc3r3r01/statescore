@@ -49,11 +49,12 @@ app.get('/index.html', function(req, res) {
                 return;
             }
             contents = contents.toString('utf8');
-            //replacing the placeholders for the hostname with environment variable
+            //DEBUG : if an env variable has been set, this is used as hostname otherwise it falls to the default
+            // hostname for the app
             if (process.env.PUBLICHOSTNAME) {
                 contents = contents.replace(/REPLACEME/g, process.env.PUBLICHOSTNAME);
             } else {
-                contents = contents.replace(/REPLACEME/g, "localhost");
+                contents = contents.replace(/REPLACEME/g, "statescore.s10lab.net");
             }
             res.writeHead(200, {
                 "Content-Type": "text/html"
@@ -86,11 +87,12 @@ app.get('/admin.html', function(req, res) {
                 return;
             }
             contents = contents.toString('utf8');
-            //replacing the placeholders for the hostname with environment variable
+            //DEBUG : if an env variable has been set, this is used as hostname otherwise it falls to the default
+            // hostname for the app
             if (process.env.PUBLICHOSTNAME) {
                 contents = contents.replace(/REPLACEME/g, process.env.PUBLICHOSTNAME);
             } else {
-                contents = contents.replace(/REPLACEME/g, "localhost");
+                contents = contents.replace(/REPLACEME/g, "statescore.s10lab.net");
             }
             res.writeHead(200, {
                 "Content-Type": "text/html"
