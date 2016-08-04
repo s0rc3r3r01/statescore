@@ -1,12 +1,13 @@
 //module to interact with Redis backend server
 var redis = require('redis'),
     async = require('async'),
-    colors = require('colors');
+    colors = require('colors'),
+    config = require('./config');
 
 exports.version = "0.0.1";
 
 //creating client
-var client = redis.createClient();
+var client = redis.createClient(config.databaseport(), config.databasehost());
 
 client.on('connect', function() {
     console.log('REDIS connected'.yellow);
