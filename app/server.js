@@ -56,17 +56,21 @@ app.get('/index.html', function(req, res) {
             } else {
                 contents = contents.replace(/REPLACEME/g, "statescore.s10lab.net");
             }
+//trying to disable client-side caching to avoid inconsistent behaviour
             res.writeHead(200, {
-                "Content-Type": "text/html"
+                "Content-Type": "text/html",
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma" : "no-cache",
+                "Expires": "0"
             });
             res.end(contents);
         }
     );
 });
 
-app.get('/loaderio-ae9c96b7cd2f05b770ff7f5e2c92694b.html', function(req, res) {
+app.get('/loaderio-936d844c6d888c77527eba215d1f13a6.html', function(req, res) {
     //reads the local page and sends that as reply
-            contents = "loaderio-ae9c96b7cd2f05b770ff7f5e2c92694b";
+            contents = "loaderio-936d844c6d888c77527eba215d1f13a6";
             res.writeHead(200, {
                 "Content-Type": "text/html"
             });
