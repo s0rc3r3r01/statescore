@@ -19,7 +19,6 @@ exports.storeUser = function(user) {
             console.error("REDIS ERROR".red);
             return;
         }
-        console.log("USER stored in REDIS " + user.yellow);
     });
 }
 
@@ -29,7 +28,6 @@ exports.countViews = function(user) {
             console.error("REDIS ERROR".red);
             callback(err);
         }
-        console.log("view count for user " + user.yellow);
         callback (null, reply);
     });
 }
@@ -39,7 +37,6 @@ exports.addView = function(user,callback) {
             console.error("REDIS ERROR".red);
             callback(err);
         }
-        console.log("views for user incremented " + user.yellow);
         callback(null, reply);
     });
 }

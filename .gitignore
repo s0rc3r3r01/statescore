@@ -4,6 +4,10 @@
 
 #data.tsv
 static/content/data.tsv
+
+#userfile
+userlist/users
+
 # Logs
 *.log
 npm-debug.log*

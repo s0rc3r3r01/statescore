@@ -19,7 +19,6 @@ exports.checkDisk = function(user) {
         return (false);
     }
     if (file.indexOf(user) > -1) {
-        console.log("position in file of the user    " + file.indexOf(user));
         return true;
     } else {
         return false;
@@ -36,17 +35,15 @@ exports.countViews = function(user) {
     //variable containing the number of initial position of the number with the views
     var viewposition = file.indexOf(user) + user.length + 1;
     var views = file.substring(viewposition, viewposition+4);
-    console.log("view count : " + views.yellow);
     return views;
 }
 
 exports.storeUser = function(user) {
     try {
-        fs.appendFileSync('../userlist/users', user + ":0001:", 'utf8');
+        fs.appendFileSync('../userlist/users', user + ":1", 'utf8');
     } catch (e) {
         console.error(e.red);
     }
-    console.log("user stored on disk: " + user.yellow);
 }
 
 exports.addView = function(user) {
@@ -65,5 +62,4 @@ exports.addView = function(user) {
     file = file.replace(user + ":" + views, user + ":" + plus1);
     //writing the file to disk
     fs.writeFileSync('../userlist/users', file, 'utf8');
-    console.log("new views count for user : " + user + "   " + file.charAt(file.indexOf(user) + user.length + 1).yellow);
 }

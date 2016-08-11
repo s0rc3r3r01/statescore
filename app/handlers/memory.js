@@ -20,7 +20,6 @@ exports.checkmemory = function(user) {
 exports.storeUser = function(user) {
 // THIS NEEDS TO BE BRACKET NOTATION
   simplememory[user] = 1;
-  console.log ("user stored in memory: " + user .yellow);
 }
 
 exports.countViews = function(user) {
@@ -29,5 +28,4 @@ exports.countViews = function(user) {
 
 exports.addView = function(user) {
     simplememory[user]++;
-    console.log ("views increcmented for " + user .yellow);
 }
