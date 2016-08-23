@@ -8,6 +8,7 @@ var async = require('async'),
     disk = require('./disk'),
     tsv = require('./tsv'),
     logger = require('./logger'),
+    description = require('./description')
     os = require('os');
 
 
@@ -196,10 +197,12 @@ exports.incomingConnectionHandler = function(req, res) {
                 name: lookuptime
             }]);
             fs.appendFileSync('../static/content/data.tsv', generatedtsv, 'utf8');
+            // adding description text
+            var desc = description.text(score);
             var jsonpayload = {
                 "score": score,
                 "lookuptime": lookuptime,
-                "description": "containssss",
+                "description": desc,
                 "user": realuser,
                 "visitnumber": visitnumber,
                 "containerid": os.hostname(),
