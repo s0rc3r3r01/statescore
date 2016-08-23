@@ -1,0 +1,14 @@
+node:
+    image: sorcerer01/statescore
+    links:
+        - redis
+    ports:
+        - "80"
+    environment:
+        - HOSTNAME=development
+        - REDISHOST=redis
+
+redis:
+    image: redis
+    ports:
+        - "6379"
