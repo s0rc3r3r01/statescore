@@ -10,7 +10,8 @@ exports.version = "0.0.1";
 var client = redis.createClient(config.databaseport(), config.databasehost());
 
 client.on('connect', function() {
-    console.log('REDIS connected'.yellow);
+    console.log('REDIS connected'.yellow)
+    console.log ('REDIS on host : ' + config.databasehost() + ' and on ' + config.databaseport());
 });
 
 exports.storeUser = function(user) {

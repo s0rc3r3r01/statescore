@@ -3,7 +3,7 @@ node:
     links:
         - redis
     ports:
-        - "80"
+        - "80:80"
     environment:
         - HOSTNAME=development
         - REDISHOST=redis
@@ -11,4 +11,4 @@ node:
 redis:
     image: redis
     ports:
-        - "6379"
+        - "6379:6379"
