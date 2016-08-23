@@ -4,7 +4,8 @@ exports.version = "0.0.1";
 
 exports.text = function(a) {
 // switch statement used to return descriptions
-  swith(a) {
+  switch(a) {
+    
     case 0 :
     return "The application was not able to obtain any previous state about the user ";
     break;

@@ -8,7 +8,7 @@ var async = require('async'),
     disk = require('./disk'),
     tsv = require('./tsv'),
     logger = require('./logger'),
-    description = require('./description')
+    description = require('./descriptions')
     os = require('os');
 
 
