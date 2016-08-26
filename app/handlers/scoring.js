@@ -135,7 +135,7 @@ exports.incomingConnectionHandler = function(req, res) {
                             }
                             visitnumber = reply;
                             //assigning score 4 for database lookup
-                            score = 4
+                            score = 3
                             lookuptime = elapsed_time(startLookup);
                             logger.logEvent({
                                 'store': 'database',
