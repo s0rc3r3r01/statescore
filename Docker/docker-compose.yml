@@ -5,7 +5,7 @@ node:
     ports:
         - "80:80"
     environment:
-        - HOSTNAME=development
+        - HOST_HOSTNAME=development
         - REDISHOST=redis
 
 redis:
