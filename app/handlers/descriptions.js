@@ -1,11 +1,11 @@
-// handler to contain text related to the scoring function
+// handler to contain the description texts related to the scoring function
 
 exports.version = "0.0.1";
 
 exports.text = function(a) {
 // switch statement used to return descriptions
   switch(a) {
-    
+
     case 0 :
     return "The application was not able to obtain any previous state about the user ";
     break;

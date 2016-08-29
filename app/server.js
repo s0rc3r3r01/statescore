@@ -105,6 +105,7 @@ app.get('/admin.html', function(req, res) {
         }
     );
 });
+//handling admin commands
 app.get('/admin', function(req, res) {
     scoring.memoryStoreManager(req, res, function(err) {
         if (err) {
@@ -120,7 +121,7 @@ app.get('/admin', function(req, res) {
         res.end("success");
     });
 });
-
+//general redirect
 app.get("*", function(req, res) {
     res.writeHead(404, {
         "Content-Type": "text/html"
@@ -128,5 +129,5 @@ app.get("*", function(req, res) {
     res.end("RESOURCE NOT FOUND 404");
 
 });
-
+//listening to port 80 *may require root on machine*
 app.listen(80);

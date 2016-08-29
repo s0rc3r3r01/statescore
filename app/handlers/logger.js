@@ -1,3 +1,5 @@
+//this file contains the loggin functions used in statescore
+
 var Logstash = require('logstash-client'),
     colors = require('colors'),
     os = require('os');
@@ -11,7 +13,7 @@ var logstash = new Logstash({
     port: 9000
 });
 
-
+//outputs on console and on logstash
 exports.logEvent = function(obj, callback) {
     obj.timestamp = new Date();
     obj.containerid = os.hostname();

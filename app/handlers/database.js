@@ -14,6 +14,7 @@ client.on('connect', function() {
     console.log ('REDIS on host : ' + config.databasehost() + ' and on ' + config.databaseport());
 });
 
+// structure common to all the storage management handlers
 exports.storeUser = function(user) {
     client.set(user, '1', function(err, reply) {
         if (err) {
@@ -41,7 +42,7 @@ exports.addView = function(user,callback) {
         callback(null, reply);
     });
 }
-
+//assuming node convention of error as first parameter
 exports.checkDatabase = function(user, callback) {
     client.exists(user, function(err, reply) {
         if (err) {

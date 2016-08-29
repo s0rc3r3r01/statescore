@@ -1,4 +1,4 @@
-//Contains simple scoring function for statefull of Node application
+//Contains simple scoring function to test statefulness of Node application
 var async = require('async'),
     fs = require('fs'),
     uuid = require('node-uuid'),

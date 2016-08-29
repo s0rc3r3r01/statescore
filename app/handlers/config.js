@@ -1,4 +1,4 @@
-// explicit host management with environment variable
+// using environment variables to change database connection
 
 exports.version = "0.0.2";
 
