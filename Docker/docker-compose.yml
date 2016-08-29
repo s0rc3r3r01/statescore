@@ -1,3 +1,6 @@
+#Docker compose file used to define a multi-container, single host deployment
+#of Statescore, the containers are linked, the file is in version 1
+
 node:
     image: sorcerer01/statescore
     links:

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#simple startup script for nodeapp server
+#simple startup script for statescore server
 
 #git clone of storeapp from remote server
 git clone https://github.com/s0rc3r3r01/statescore.git /opt/statescore
