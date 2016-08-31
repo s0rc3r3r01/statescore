@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: statescore
+  labels:
+    name: statescore
+spec:
+  containers:
+    - resources:
+      image: gcr.io/k8s-statescore/statescore:v1
+      name: statescore
+      env:
+        - name: HOST_HOSTNAME
+          value: kube1
+      ports:
+        - containerPort: 80
+          name: node
+      volumeMounts:
+        - name: statescore-volume
+          mountPath: /opt/userlist/
+  volumes:
+    - name: statescore-volume
+      gcePersistentDisk:
+        pdName: statescore-disk2
+        fsType: ext4
