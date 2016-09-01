@@ -32,7 +32,7 @@ spec:
         - name: local-statescore
           mountPath: /opt/userlist/
           readOnly: false
-  volumes:
-    - name: local-statescore
-        persistentVolumeClaim:
-          claimName: claim1statescore
+volumes:
+  - name: local-statescore
+    persistentVolumeClaim:
+      claimName: claim1statescore
